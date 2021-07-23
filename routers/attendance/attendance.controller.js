@@ -1,7 +1,18 @@
-import { Student, Class, StudentClass } from "../../db/models";
+import { Student, Class, StudentClass, Session } from "../../db/models";
+import Server from "socket.io";
+
+export const studentAttend = async (req, res, next) => {
+  const { classSecret, studentId } = req.body;
+  const session = await Session.findOne({ where: classSecret });
+  const { classId } = session;
+  req.classId = classId;
+  req.studentId = studentId;
+  await takeAttendance(req, res, next);
+};
+
 export const takeAttendance = async (req, res, next) => {
   try {
-    const { studentId, classId, classSecret } = req.body;
+    const { studentId, classId } = req.body;
 
     if (!studentId || !classId) {
       throw new Error("You should provide classId and studentId");
@@ -36,7 +47,18 @@ export const takeAttendance = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log("***** Couldn't take attendnace with error", error);
+    console.log("***** Couldn't take attendance with error", error);
+    next(error);
+  }
+};
+
+export const createSession = async (req, res, next) => {
+  try {
+    const { classId } = req.body;
+    const classSecret = Math.floor(1000 + Math.random() * 9000);
+    const session = await Session.create({ classSecret, classId });
+    res.json({ session });
+  } catch (error) {
     next(error);
   }
 };

@@ -44,7 +44,15 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 // Relationships
-
+// M:1 Session - Class
+db.Class.hasMany(db.Session, {
+  foreignKey: "classId",
+  as: "sessions",
+});
+db.Session.belongsTo(db.Class, {
+  foreignKey: "classId",
+  as: "class",
+});
 // M:1 Subject - Class
 db.Subject.hasMany(db.Class, {
   foreignKey: "subjectId",
