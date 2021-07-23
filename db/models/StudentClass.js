@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const StudentClass = sequelize.define("StudentClass", {
-    attendanceStatus: DataTypes.STRING,
+    attendanceStatus: DataTypes.INTEGER,
   });
 
   return StudentClass;

@@ -4,7 +4,7 @@
     "password": null,
     "database": "mawjood_db",
     "host": "127.0.0.1",
-    "dialect": "sqlite",
+    "dialect": "postgres",
     "logging": false
   },
   "test": {
