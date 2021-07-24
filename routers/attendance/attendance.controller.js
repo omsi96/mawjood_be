@@ -46,7 +46,10 @@ export const takeAttendance = async (req, res, next) => {
       where: { studentId, classId },
     });
     if (foundAttended) {
-      res.json({ message: "student has already been marked as attended" });
+      res.json({
+        message: "student has already been marked as attended",
+        studentId,
+      });
     }
     // console.log(foundClass, foundStudent);
     if (foundStudent && foundClass) {
