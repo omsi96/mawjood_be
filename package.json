@@ -43,6 +43,7 @@
     "slug-arabic": "^1.0.0",
     "slugify": "^1.4.6",
     "socket.io": "^4.1.3",
+    "socket.io-client": "^4.1.3",
     "sqlite3": "^5.0.2"
   },
   "scripts": {

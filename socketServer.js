@@ -1,10 +1,13 @@
 const io = require("socket.io")(3000);
 
 io.on("connection", (socket) => {
-  socket.emit("client-message", "client Appeared!");
+  console.log("New instructor is taking attendance");
 
-  socket.on("newStudent", (studentName) => {
-    console.log("New student hopped", studentName);
+  socket.on("disconnect", (socket) => {
+    console.log("DISCONNECTING");
+  });
+  socket.on("newStudent", (data) => {
+    console.log("New student hopped", data);
   });
 });
 

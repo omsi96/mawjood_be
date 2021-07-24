@@ -1,5 +1,5 @@
-// const socket = io("http://localhost:3000");
+const socket = io("http://localhost:3000");
 
-// socket.on("client-message", (data) => {
-//   console.log(data);
-// });
+socket.on("client-message", (data) => {
+  console.log(data);
+});

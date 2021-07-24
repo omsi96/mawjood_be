@@ -1,11 +1,14 @@
 import { User, Class, Attendance, Session } from "../../db/models";
-import Server from "socket.io";
+import { io } from "socket.io-client";
+let socket;
 
 export const terminateSession = async (req, res, next) => {
   try {
     const { sessionId } = req.params;
     const session = await Session.findByPk(sessionId);
+    socket.close();
     await session.destroy();
+
     res.end();
   } catch (error) {
     next(error);
@@ -28,6 +31,14 @@ export const studentAttend = async (req, res, next) => {
     });
 
     await takeAttendance(req, res, next);
+
+    const student = await User.findByPk(studentId);
+    socket.emit("newStudent", {
+      classId,
+      studentId,
+      classSecret,
+      name: student.name,
+    });
   } catch (error) {
     next(error);
   }
@@ -82,6 +93,13 @@ export const createSession = async (req, res, next) => {
     const classSecret = Math.floor(1000 + Math.random() * 9000);
     const session = await Session.create({ classSecret, classId });
     res.json({ session });
+    // SOCKET
+
+    socket = io("http://localhost:3000", {
+      reconnectionDelayMax: 10000,
+      auth: { token: "123" },
+      query: { "my-key": "" },
+    });
   } catch (error) {
     next(error);
   }
