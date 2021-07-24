@@ -1,6 +1,4 @@
-const io = require("socket.io")(3000);
-
-io.on("connection", (socket) => {
+const socketController = (socket) => {
   console.log("New instructor is taking attendance");
 
   socket.on("disconnect", (socket) => {
@@ -8,7 +6,9 @@ io.on("connection", (socket) => {
   });
   socket.on("newStudent", (data) => {
     console.log("New student hopped", data);
+    socket.broadcast.emit("newStudent", data);
+    console.log("BROADCAST SENT!!!!");
   });
-});
+};
 
-export default io;
+export default socketController;

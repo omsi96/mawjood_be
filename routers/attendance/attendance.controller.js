@@ -1,6 +1,6 @@
 import { User, Class, Attendance, Session } from "../../db/models";
 import { io } from "socket.io-client";
-let socket;
+let socket; // TODO: This should be an array of scokets, since there can be multiple sessions running at the same time
 
 export const terminateSession = async (req, res, next) => {
   try {
@@ -95,7 +95,7 @@ export const createSession = async (req, res, next) => {
     res.json({ session });
     // SOCKET
 
-    socket = io("http://localhost:3000", {
+    socket = io("http://localhost:8000", {
       reconnectionDelayMax: 10000,
       auth: { token: "123" },
       query: { "my-key": "" },
