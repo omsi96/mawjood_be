@@ -62,14 +62,24 @@ db.Class.belongsTo(db.Subject, {
   foreignKey: "subjectId",
   as: "subject",
 });
-// M:N Student - Class through StudentClass
-db.Student.belongsToMany(db.Class, {
+// M:N Student - Class through Attendance
+db.User.belongsToMany(db.Class, {
   foreignKey: "studentId",
-  through: { model: db.StudentClass },
+  through: { model: db.Attendance },
 });
-db.Class.belongsToMany(db.Student, {
+db.Class.belongsToMany(db.User, {
   foreignKey: "classId",
-  through: { model: db.StudentClass },
+  through: { model: db.Attendance },
+});
+
+// M:N Student - Subject through Attendance
+db.User.belongsToMany(db.Subject, {
+  foreignKey: "userId",
+  through: db.StudentSubject,
+});
+db.Subject.belongsToMany(db.User, {
+  foreignKey: "subjectId",
+  through: db.StudentSubject,
 });
 
 module.exports = db;

@@ -1,4 +1,4 @@
-import { Student, Class, StudentClass, Session } from "../../db/models";
+import { User, Class, Attendance, Session } from "../../db/models";
 import Server from "socket.io";
 
 export const terminateSession = async (req, res, next) => {
@@ -40,9 +40,9 @@ export const takeAttendance = async (req, res, next) => {
     if (!studentId || !classId) {
       throw new Error("You should provide classId and studentId");
     }
-    const foundStudent = await Student.findByPk(studentId);
+    const foundStudent = await User.findByPk(studentId);
     const foundClass = await Class.findByPk(classId);
-    const foundAttended = await StudentClass.findOne({
+    const foundAttended = await Attendance.findOne({
       where: { studentId, classId },
     });
     if (foundAttended) {
@@ -50,7 +50,7 @@ export const takeAttendance = async (req, res, next) => {
     }
     // console.log(foundClass, foundStudent);
     if (foundStudent && foundClass) {
-      const attended = await StudentClass.create({
+      const attended = await Attendance.create({
         attendanceStatus: 1,
         studentId,
         classId,

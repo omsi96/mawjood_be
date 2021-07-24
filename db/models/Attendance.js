@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-  const StudentClass = sequelize.define("StudentClass", {
+  const Attendance = sequelize.define("Attendance", {
     attendanceStatus: DataTypes.INTEGER,
   });
 
-  return StudentClass;
+  return Attendance;
 };

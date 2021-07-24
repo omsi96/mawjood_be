@@ -27,7 +27,7 @@ export const isMentor = (req, res, next) => {
 };
 
 export const isStudent = (req, res, next) => {
-  if (req.user.student != null) {
+  if (req.user.userType === "student") {
     next();
   } else {
     next(

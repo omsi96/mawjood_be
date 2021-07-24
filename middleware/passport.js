@@ -1,5 +1,5 @@
 const LocalStrategy = require("passport-local");
-const { User, Profile, Student, Mentor } = require("../db/models");
+const { User /*, Profile, Student, Mentor */ } = require("../db/models");
 const bcrypt = require("bcrypt");
 const JWTStrategy = require("passport-jwt").Strategy;
 const { JWT_SECRET } = require("../config/keys");
@@ -54,37 +54,12 @@ exports.jwtStrategy = new JWTStrategy(
       // console.log("FETCHED MODEL: USER, ", user.profile);
       done(null, {
         ...jwtPayload,
-        profileType: profileType(jwtPayload),
-        getProfile: () => getProfile(jwtPayload),
-        getProfileModel: () => getProfileModel(profileType(jwtPayload)),
+        // profileType: profileType(jwtPayload),
+        // getProfile: () => getProfile(jwtPayload),
+        // getProfileModel: () => getProfileModel(profileType(jwtPayload)),
       });
     } catch (error) {
       done(error);
     }
   }
 );
-
-const profileType = (user) => {
-  if (user.mentor) {
-    return "mentor";
-  } else if (user.student) {
-    return "student";
-  } else if (user.ops) {
-    return "ops";
-  } else if (user.admin) {
-    return "admin";
-  }
-};
-
-const getProfile = (user) => {
-  return user[profileType(user)];
-};
-
-const getProfileModel = (profileType) => {
-  switch (profileType) {
-    case "mentor":
-      return Mentor;
-    case "student":
-      return Student;
-  }
-};
