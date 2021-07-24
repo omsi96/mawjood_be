@@ -1,13 +1,36 @@
 import { Student, Class, StudentClass, Session } from "../../db/models";
 import Server from "socket.io";
 
+export const terminateSession = async (req, res, next) => {
+  try {
+    const { sessionId } = req.params;
+    const session = await Session.findByPk(sessionId);
+    await session.destroy();
+    res.end();
+  } catch (error) {
+    next(error);
+  }
+};
 export const studentAttend = async (req, res, next) => {
-  const { classSecret, studentId } = req.body;
-  const session = await Session.findOne({ where: classSecret });
-  const { classId } = session;
-  req.classId = classId;
-  req.studentId = studentId;
-  await takeAttendance(req, res, next);
+  try {
+    const { classSecret, studentId } = req.body;
+
+    const session = await Session.findOne({ where: { classSecret } });
+    const { classId } = session;
+
+    req.body.classId = classId;
+    req.body.studentId = studentId;
+
+    console.log("Student is taking attendance, ", {
+      classSecret,
+      studentId,
+      classId,
+    });
+
+    await takeAttendance(req, res, next);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const takeAttendance = async (req, res, next) => {
@@ -23,11 +46,9 @@ export const takeAttendance = async (req, res, next) => {
       where: { studentId, classId },
     });
     if (foundAttended) {
-      res
-        .status(400)
-        .json({ message: "student has already been marked as attended" });
+      res.json({ message: "student has already been marked as attended" });
     }
-    console.log(foundClass, foundStudent);
+    // console.log(foundClass, foundStudent);
     if (foundStudent && foundClass) {
       const attended = await StudentClass.create({
         attendanceStatus: 1,
